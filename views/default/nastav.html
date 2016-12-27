@@ -1,0 +1,47 @@
+{{extend 'layout.html'}}
+
+<a class="btn btn-default" href="{{=URL('index')}}">Vyzkoušej aktuální nastavení</a>
+
+<div class="well">
+{{if nastavene:}}
+  <table class="table">
+    <thead>
+      <th>nesleduj</th>
+      <th>priorita</th>
+      <th>vlákno</th>
+    </thead>
+  {{for nast in nastavene:}}
+    <tr>
+      <td><a href="{{=URL('nesleduj', args=nast.user_vlakno.id)}}" class="btn btn-small" title="nesledovat toto vlákno">X</a></td>
+      <td>{{=nast.user_vlakno.priorita}}</td>
+      <td>{{=nast.vlakno.vlakno}} <small>({{=nast.tema.tema}})</small></td>
+    </tr>
+  {{pass}}
+  </table>
+{{else:}}
+  <div>
+    Zatím nemáš vybraná žádná vlákna pro sledování na mobilu
+    (a pokud to nezměníš, bude se zobrazovat několik předvolených).
+  </div>
+  <div class="alert alert-info">
+    Vlákno přidáš klepnutím v seznamu níže a pak určením jeho priority (pořadí).
+  </div>
+{{pass}}
+</div>
+
+<h2>Sledovat <small>(klepni na požadované vlákno)</small></h2>
+{{last = ''}}
+{{for vlakno in vse:}}
+  {{if last != vlakno.tema.tema:}}
+    {{last = vlakno.tema.tema}}
+    <h3>{{=last}}</h3>
+  {{pass}}
+
+  <div>
+  {{if vlakno.vlakno.id in nastavene_ids:}}
+    {{=vlakno.vlakno.vlakno}}
+  {{else:}}
+    <a href="{{=URL('sleduj', args=vlakno.vlakno.id)}}">{{=vlakno.vlakno.vlakno}}</a>
+  {{pass}}
+  </div>
+{{pass}}

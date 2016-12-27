@@ -175,6 +175,7 @@
 'Error snapshot': 'Snapshot chyby',
 'Error ticket': 'Ticket chyby',
 'Errors': 'Chyby',
+'Errors in form, please check it out.': 'Errors in form, please check it out.',
 'Exception %(extype)s: %(exvalue)s': 'Výjimka %(extype)s: %(exvalue)s',
 'Exception %s': 'Výjimka %s',
 'Exception instance attributes': 'Prvky instance výjimky',
@@ -504,4 +505,5 @@
 'You need to set up and reach a': 'Je třeba nejprve nastavit a dojít až na',
 'You visited the url %s': 'Zadal jsi URL adresu %s.',
 'Your application will be blocked until you click an action button (next, step, continue, etc.)': 'Aplikace bude blokována než se klikne na jedno z tlačítek (další, krok, pokračovat, atd.)',
+'Zadej číslo 1..9999999': 'Zadej číslo 1..9999999',
 }
