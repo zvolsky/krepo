@@ -60,7 +60,8 @@ def vlakna():
             return 'Téma %s: Nenalezena tabulka vláken.' % tema1.txt
         pos = 0
         for tr in tbl.find_all('tr'):
-            if len(tr.find_all('a')) == 1:
+            td = tr.find_all('td')
+            if len(td) >= 2 and len(td[1].find_all('a', recursive=False)) == 1:    # další odkazy mohou být v komentáři ve stejném <td>
                 posledni = tr.find('td', "dtdatum")
                 if posledni:
                     posledni = posledni.text
@@ -77,10 +78,8 @@ def vlakna():
                             if row.url != url:
                                 row.update_record(url=url)
                             if row.pos != pos:
-                                row.update_record(pos=tema1.pos)
-                            if row.tema_pos != pos:
-                                row.update_record(tema_pos=tema1.pos)
+                                row.update_record(pos=pos)
                         else:
-                            db.vlakno.insert(tema_id=tema1.id, tema_pos=tema1.pos, vlakno=txt, url=url, aktivni=True, pos=pos)
+                            db.vlakno.insert(tema_id=tema1.id, vlakno=txt, url=url, aktivni=True, pos=pos)
                     pos += 1  # bez ohledu na posledni, aby se zbytečně neaktualizovalo pos
     return 'Ok.'

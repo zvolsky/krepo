@@ -1,16 +1,84 @@
 # -*- coding: utf-8 -*-
-# this file is released under public domain and you can use without limitations
 
-# -------------------------------------------------------------------------
-# This is a sample controller
-# - index is the default action of any application
-# - user is required for authentication and authorization
-# - download is for downloading files uploaded in the db (does streaming)
-# -------------------------------------------------------------------------
+import bs4
+import requests
+
+
+USER_FOR_DEFAULT_SETTING = 'krepo.default@zitranavylet.cz'
 
 
 def index():
-    return "zatim nezprovozneno"
+    def get_label(nastavene, pos):
+        if 0 <= pos < len(nastavene):
+            return nastavene[pos].vlakno.kratce or nastavene[pos].vlakno.vlakno.split(' ', 1)[0]
+        else:
+            return None
+
+    def get_nastavene():
+        return db(db.user_vlakno).select(
+                db.user_vlakno.ALL, db.vlakno.ALL,
+                join=db.vlakno.on(db.vlakno.id == db.user_vlakno.vlakno_id),
+                orderby=~db.user_vlakno.priorita
+                )
+
+    nastavene = get_nastavene()
+    if not len(nastavene):
+        corr_user = db(db.auth_user.email == USER_FOR_DEFAULT_SETTING).select(db.auth_user.id).first()
+        if corr_user:
+            auth.corrected_user_id = corr_user.id
+            nastavene = get_nastavene()
+        if not len(nastavene):
+            return "Nebylo nalezeno defaultní nastavení krepo.default. Informuj prosím administrátora: zvolsky@seznam.cz."
+
+    try:
+        pos = int(request.args(0))
+    except (ValueError, TypeError):
+        pos = 0
+
+    tato = get_label(nastavene, pos)
+    vzad = get_label(nastavene, pos - 1)
+    vpred = get_label(nastavene, pos + 1)
+
+    ok = True
+    results = requests.get(nastavene[pos].vlakno.url)
+    if not results or results.status_code != 200:
+        ok = False
+
+    if ok:
+        soup = bs4.BeautifulSoup(results.content, 'lxml')
+        netisk = soup.find_all('table', 'netisk')
+        if netisk:
+            netisk = netisk[0]
+        diskuse_tabulka = soup.find_all('table', 'diskuse_tabulka')
+        for tbl in diskuse_tabulka[::-1]:
+            if tbl != netisk:
+                break
+
+        prispevky = []
+        if tbl:
+            trows = tbl.tbody.find_all('tr')
+            allow_txt = False
+            for trow in trows:
+                if allow_txt:
+                    allow_txt = False  # není-li text zde, v dalším <tr> už nás nezajímá (zmatek autor/txt)
+                    txt = trow.find_all('td', 'dftext')
+                    if txt:
+                        prispevky[-1]['txt'] = txt[0].text.encode('utf-8')
+                else:
+                    autor = trow.find_all('td', 'dfautorlevy')
+                    if autor:
+                        prispevky.append({})
+                        allow_txt = True   # text povolen jen v následujícím <tr>
+        prispevky = prispevky[-3:]
+        naposled = datetime.datetime.now()
+
+        db((db.user_vlakno.auth_user_id == auth.user_id) &
+                (db.user_vlakno.id == nastavene[pos].user_vlakno.id)).update(
+                naposled=naposled
+                )
+
+
+    return dict(pos=pos, tato=tato, vpred=vpred, vzad=vzad, ok=ok, prispevky=prispevky)
 
 
 @auth.requires_login()
@@ -41,7 +109,7 @@ def nesleduj():
 def sleduj():
     try:
         vlakno_id = int(request.args(0))
-    except ValueError:
+    except (ValueError, TypeError):
         redirect(URL('nastav'))
     if not db((db.vlakno.id == vlakno_id) & (db.vlakno.aktivni == True)).select():
         redirect(URL('nastav'))
