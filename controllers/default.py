@@ -40,6 +40,84 @@ def index():
         except Exception:
             return datetime.datetime(1900, 1, 1)
 
+    def get_from_krepo(url, vcetne_archivu=False, archivy=None):
+        # stáhnout vlákno z k-report
+        ok = True
+        results = requests.get(url)
+        if not results or results.status_code != 200:
+            ok = False
+
+        jeste_nebereme = True
+        prispevky = []
+        if ok:
+            # extrahovat příspěvky
+            soup = bs4.BeautifulSoup(results.content, 'lxml')
+            netisk = soup.find_all('table', 'netisk')
+            if netisk:
+                netisk = netisk[0]
+            diskuse_tabulka = soup.find_all('table', 'diskuse_tabulka')
+            for tbl in diskuse_tabulka[::-1]:
+                if tbl != netisk:
+                    break
+
+            if tbl:
+                trows = tbl.tbody.find_all('tr')
+                if limit:                           # neběží při byhledání aktualizací / TODO: při problémech tento if vyhodit
+                    trows = trows[-limit * 2 - 1:]  # 2 řádky na příspěvek a na konci je ještě falešný řádek
+                    jeste_nebereme = False
+                allow_txt = False
+                potrebujeme_jeste_starsi = True
+                for trow in trows:
+                    if allow_txt:
+                        allow_txt = False  # není-li text zde, v dalším <tr> už nás nezajímá (zmatek autor/txt)
+                        txt = trow.find_all('td', 'dftext')
+                        if txt:
+                            txt = get_kr_tag(txt[0], '<!--Text-->')
+                            prispevky[-1]['txt'] = txt.replace('style="background: url(\'/', 'style="background: url(\'http://www.k-report.net/')
+                    else:
+                        if jeste_nebereme:
+                            neco_jako_cas = trow.find_all('td', 'dfautorpravy')
+                            if neco_jako_cas:  # jinak havaruje na posledním falešném <tr class="netisk">
+                                neco_jako_cas = neco_jako_cas[0].div.em.text.split(',', 1)[1]
+                                kdy = cas_z_necasu(neco_jako_cas)
+                                if kdy >= dosud_naposled:
+                                    jeste_nebereme = False
+
+                                    # rekurzivně zpracovat archivy?
+                                    if potrebujeme_jeste_starsi:  # toto je pouze na 1.řádku, zde nemůžeme mít už nabrané staré příspěvky
+                                        if vcetne_archivu:   # voláno z nearchivní stránky
+                                            for tbla in diskuse_tabulka[::-1]:
+                                                if tbla != netisk and tbla != tbl:
+                                                    archivy = parse_archivy(tbla)
+                                                    break
+                                        if archivy:          # jsou k dispozici nezpracované archivy
+                                            _ok, prispevky, _nezacaly_nove = get_from_krepo(archivy[0], vcetne_archivu=False, archivy=archivy[1:])
+
+                                    else:                         # zde můžeme mít už nabrané staré příspěvky - omezme jejich počet
+                                        prispevky = prispevky[-kontext:]  # ponechat jen kontext: pár posledních starých
+                                        for prispevek in prispevky:
+                                            prispevek['old'] = True
+
+                            potrebujeme_jeste_starsi = False
+
+                        autor = trow.find_all('td', 'dfautorlevy')
+                        if autor:
+                            prispevky.append({'aut': get_kr_tag(autor[0], '<!--name-->')})
+                            allow_txt = True   # text povolen jen v následujícím <tr>
+        return ok, prispevky, jeste_nebereme
+
+    def parse_archivy(tbla):
+        archivy = []
+        odkazy = tbla.find_all('a')
+        for odkaz in odkazy[::-1]:
+            url = odkaz['href']
+            if url.startswith('http://www.k-report.net/discus/messages/'):
+                archivy.append(url)
+            elif url.startswith('http://www.k-report.net/discus/archiv20'):
+                archivy.append(url)
+                break
+        return archivy[:8]  # vzhledem k rekurzivnímu volání omezíme počet
+
     # seznam sledovaných
     nastavene = get_nastavene()
     if len(nastavene):
@@ -65,6 +143,7 @@ def index():
         dosud_naposled = nastavene[pos].user_vlakno.naposled
         if dosud_naposled:
             limit = 0
+            kontext = 2                     # kontext: kolik starých ponecháme
         else:
             limit = 5
     else:
@@ -75,75 +154,24 @@ def index():
     vzad = get_label(nastavene, pos - 1)
     vpred = get_label(nastavene, pos + 1)
 
-    # stáhnout vlákno z k-report
-    ok = True
-    results = requests.get(nastavene[pos].vlakno.url)
-    if not results or results.status_code != 200:
-        ok = False
+    # stáhnout a extrahovat z k-report
+    ok, prispevky, nezacaly_nove = get_from_krepo(nastavene[pos].vlakno.url, vcetne_archivu=not limit)
 
-    if ok:
-        # extrahovat příspěvky
-        soup = bs4.BeautifulSoup(results.content, 'lxml')
-        netisk = soup.find_all('table', 'netisk')
-        if netisk:
-            netisk = netisk[0]
-        diskuse_tabulka = soup.find_all('table', 'diskuse_tabulka')
-        for tbl in diskuse_tabulka[::-1]:
-            if tbl != netisk:
-                break
+    # omezit počet zobrazených; při aktualizacích zjistit, jestli jsou nějaké nové
+    if limit:
+        prispevky = prispevky[-limit:]
+    elif nezacaly_nove:
+        prispevky = prispevky[-kontext:]  # ponechat jen kontext: pár posledních starých
 
-        prispevky = []
-        if tbl:
-            trows = tbl.tbody.find_all('tr')
-            if limit:                           # TODO: při problémech tento if vyhodit
-                trows = trows[-limit * 2 - 1:]  # 2 řádky na příspěvek a na konci je ještě falešný řádek
-                jeste_nebereme = False
-            else:                               # jen aktualizace
-                jsou_nove = False
-                jeste_nebereme = True
-                kontext = 2                     # kontext: kolik starých ponecháme
-            allow_txt = False
-            for trow in trows:
-                if allow_txt:
-                    allow_txt = False  # není-li text zde, v dalším <tr> už nás nezajímá (zmatek autor/txt)
-                    txt = trow.find_all('td', 'dftext')
-                    if txt:
-                        txt = get_kr_tag(txt[0], '<!--Text-->')
-                        prispevky[-1]['txt'] = txt.replace('style="background: url(\'/', 'style="background: url(\'http://www.k-report.net/')
-                else:
-                    if jeste_nebereme:
-                        neco_jako_cas = trow.find_all('td', 'dfautorpravy')
-                        if neco_jako_cas:  # jinak havaruje na posledním falešném <tr class="netisk">
-                            neco_jako_cas = neco_jako_cas[0].div.em.text.split(',', 1)[1]
-                            kdy = cas_z_necasu(neco_jako_cas)
-                            if kdy >= dosud_naposled:
-                                prispevky = prispevky[-kontext:]  # ponechat jen kontext: pár posledních starých
-                                kontext = len(prispevky)          # skutečný počet může být menší (pro vyhodnocení, zda jsou nějaké nové)
-                                for prispevek in prispevky:
-                                    prispevek['old'] = True
-                                jeste_nebereme = False
-                    autor = trow.find_all('td', 'dfautorlevy')
-                    if autor:
-                        prispevky.append({'aut': get_kr_tag(autor[0], '<!--name-->')})
-                        allow_txt = True   # text povolen jen v následujícím <tr>
-
-        # omezit počet zobrazených; při aktualizacích zjistit, jestli jsou nějaké nové
-        if limit:
-            prispevky = prispevky[-limit:]
-        elif jeste_nebereme:
-            prispevky = prispevky[-kontext:]  # ponechat jen kontext: pár posledních starých
-        else:
-            jsou_nove = len(prispevky) > kontext
-
-        # zapsat čas posledního prohlížení
-        if moje_nastaveni:
-            db((db.user_vlakno.auth_user_id == auth.user_id) &
-                    (db.user_vlakno.id == nastavene[pos].user_vlakno.id)).update(
-                    naposled=nove_naposled
-                    )
+    # zapsat čas posledního prohlížení
+    if moje_nastaveni:
+        db((db.user_vlakno.auth_user_id == auth.user_id) &
+                (db.user_vlakno.id == nastavene[pos].user_vlakno.id)).update(
+                naposled=nove_naposled
+                )
 
     return dict(pos=pos, tato=tato, vpred=vpred, vzad=vzad, ok=ok, prispevky=prispevky,
-                nejsou_nove=not limit and not jsou_nove)
+                nejsou_nove=not limit and nezacaly_nove)
 
 
 @auth.requires_login()
