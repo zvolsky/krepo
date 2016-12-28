@@ -1,3 +1,13 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+  <title>K-Report čtečka</title>
+</head>
+<body>
+
 {{if auth.user:}}
   <a href="#" id="menu" class="btn">&#9776;</a>
   <a href="{{=URL('nastav')}}" id="nastav" class="btn hidden">Nastav</a>
@@ -14,7 +24,7 @@
 {{pass}}
 
 {{if vpred:}}
-  <a href="{{=URL(args=pos + 1)}}" class="btn">{{=vpred}}</a>
+  <a href="{{=URL(args=pos + 1)}}" class="w3-btn">{{=vpred}}</a>
 {{pass}}
 
 
@@ -44,3 +54,6 @@
 {{else:}}
   <p>Selhalo načtení vlákna.</p>
 {{pass}}
+
+</body>
+</html>
