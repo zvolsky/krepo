@@ -29,7 +29,10 @@
 
 {{if ok:}}
   {{for prispevek in prispevky:}}
-    <p>{{=prispevek.get('txt', '')}}</p>
+    <p>
+      <span style="color: grey; padding-right: 12px;">{{=prispevek.get('aut', '')}}</span>
+      {{=XML(prispevek.get('txt', ''))}}
+    </p>
   {{pass}}
 {{else:}}
   <p>Selhalo načtení vlákna.</p>
