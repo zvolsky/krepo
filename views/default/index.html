@@ -1,5 +1,9 @@
-<a href="#" id="menu" class="btn">&#9776;</a>
-<a href="{{=URL('nastav')}}" id="nastav" class="btn hidden">Nastav</a>
+{{if auth.user:}}
+  <a href="#" id="menu" class="btn">&#9776;</a>
+  <a href="{{=URL('nastav')}}" id="nastav" class="btn hidden">Nastav</a>
+{{else:}}
+  <a href="{{=URL('user')}}" class="btn">Přihlásit se</a>
+{{pass}}
 
 {{if vzad:}}
   <a href="{{=URL(args=pos - 1)}}" class="btn">{{=vzad}}</a>
@@ -28,6 +32,9 @@
 
 
 {{if ok:}}
+  {{if nejsou_nove:}}
+    <p>Nejsou nové příspěvky.</p>
+  {{pass}}
   {{for prispevek in prispevky:}}
     <p>
       <span style="color: grey; padding-right: 12px;">{{=prispevek.get('aut', '')}}</span>

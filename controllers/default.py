@@ -30,11 +30,21 @@ def index():
             return el.split(kr_tag[4:])[1][:-5].strip()  # split('name-->'), z konce výsledku odstranit <!--/
         return ''
 
+    def cas_z_necasu(neco_jako_cas):
+        try:
+            parts = neco_jako_cas.split()
+            parts[3] = ' '
+            parts[1] = str(['ledna', 'února', 'března', 'dubna', 'května', 'června',
+                                'července', 'srpna', 'září', 'října', 'listopadu', 'prosince'].index(parts[1].encode('utf-8')) + 1) + '.'
+            return datetime.datetime.strptime(''.join(parts), '%d.%m.%Y %H:%M:%S')
+        except Exception:
+            return datetime.datetime(1900, 1, 1)
+
     # seznam sledovaných
     nastavene = get_nastavene()
     if len(nastavene):
         moje_nastaveni = True
-        naposled = datetime.datetime.now() - datetime.timedelta(seconds=10)  # radši kousek zpět
+        nove_naposled = datetime.datetime.now() - datetime.timedelta(seconds=10)  # radši kousek zpět
     else:
         moje_nastaveni = False
         corr_user = db(db.auth_user.email == USER_FOR_DEFAULT_SETTING).select(db.auth_user.id).first()
@@ -52,7 +62,8 @@ def index():
 
     # počet příspěvků
     if moje_nastaveni:
-        if nastavene[pos].user_vlakno.naposled:
+        dosud_naposled = nastavene[pos].user_vlakno.naposled
+        if dosud_naposled:
             limit = 0
         else:
             limit = 5
@@ -84,6 +95,13 @@ def index():
         prispevky = []
         if tbl:
             trows = tbl.tbody.find_all('tr')
+            if limit:                           # TODO: při problémech tento if vyhodit
+                trows = trows[-limit * 2 - 1:]  # 2 řádky na příspěvek a na konci je ještě falešný řádek
+                jeste_nebereme = False
+            else:                               # jen aktualizace
+                jsou_nove = False
+                jeste_nebereme = True
+                kontext = 2                     # kontext: kolik starých ponecháme
             allow_txt = False
             for trow in trows:
                 if allow_txt:
@@ -93,19 +111,39 @@ def index():
                         txt = get_kr_tag(txt[0], '<!--Text-->')
                         prispevky[-1]['txt'] = txt.replace('style="background: url(\'/', 'style="background: url(\'http://www.k-report.net/')
                 else:
+                    if jeste_nebereme:
+                        neco_jako_cas = trow.find_all('td', 'dfautorpravy')
+                        if neco_jako_cas:  # jinak havaruje na posledním falešném <tr class="netisk">
+                            neco_jako_cas = neco_jako_cas[0].div.em.text.split(',', 1)[1]
+                            kdy = cas_z_necasu(neco_jako_cas)
+                            if kdy >= dosud_naposled:
+                                prispevky = prispevky[-kontext:]  # ponechat jen kontext: pár posledních starých
+                                kontext = len(prispevky)          # skutečný počet může být menší (pro vyhodnocení, zda jsou nějaké nové)
+                                for prispevek in prispevky:
+                                    prispevek['old'] = True
+                                jeste_nebereme = False
                     autor = trow.find_all('td', 'dfautorlevy')
                     if autor:
                         prispevky.append({'aut': get_kr_tag(autor[0], '<!--name-->')})
                         allow_txt = True   # text povolen jen v následujícím <tr>
-        prispevky = prispevky[-limit:]
 
+        # omezit počet zobrazených; při aktualizacích zjistit, jestli jsou nějaké nové
+        if limit:
+            prispevky = prispevky[-limit:]
+        elif jeste_nebereme:
+            prispevky = prispevky[-kontext:]  # ponechat jen kontext: pár posledních starých
+        else:
+            jsou_nove = len(prispevky) > kontext
+
+        # zapsat čas posledního prohlížení
         if moje_nastaveni:
             db((db.user_vlakno.auth_user_id == auth.user_id) &
                     (db.user_vlakno.id == nastavene[pos].user_vlakno.id)).update(
-                    naposled=naposled
+                    naposled=nove_naposled
                     )
 
-    return dict(pos=pos, tato=tato, vpred=vpred, vzad=vzad, ok=ok, prispevky=prispevky)
+    return dict(pos=pos, tato=tato, vpred=vpred, vzad=vzad, ok=ok, prispevky=prispevky,
+                nejsou_nove=not limit and not jsou_nove)
 
 
 @auth.requires_login()
