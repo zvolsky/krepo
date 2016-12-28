@@ -6,8 +6,9 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 response.logo = A('K-Report - mobilní čtečka',
-                  _class="navbar-brand", _href="{{=URL('default', 'index')}}",
+                  _class="navbar-brand", _href="%s" % URL('default', 'index'),
                   _id="krepo-logo")
+
 response.title = request.application.replace('_', ' ').title()
 response.subtitle = ''
 
