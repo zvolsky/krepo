@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div class="w3-container">
+<div class="w3-row">
 {{if auth.user:}}
   <a href="#" id="menu" class="w3-btn w3-ripple w3-round">&#8801;</a>
   <a href="{{=URL('nastav')}}" id="nastav" class="w3-btn w3-indigo w3-ripple w3-round hidden">Nastav</a>
@@ -43,7 +43,7 @@
   });
 </script>
 
-<div class="w3-container">
+<div class="w3-row">
 {{if ok:}}
   {{if nejsou_nove:}}
     <p class="w3-teal">Nejsou nové příspěvky.</p>
