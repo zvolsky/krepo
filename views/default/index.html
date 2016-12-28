@@ -10,22 +10,22 @@
 <body>
 
 {{if auth.user:}}
-  <a href="#" id="menu" class="w3-btn">&#9776;</a>
-  <a href="{{=URL('nastav')}}" id="nastav" class="w3-btn w3-indigo hidden">Nastav</a>
+  <a href="#" id="menu" class="w3-btn w3-ripple w3-round">&#8801;</a>
+  <a href="{{=URL('nastav')}}" id="nastav" class="w3-btn w3-indigo w3-ripple w3-round hidden">Nastav</a>
 {{else:}}
-  <a href="{{=URL('user')}}" class="w3-btn w3-pink">Přihlásit se</a>
+  <a href="{{=URL('user')}}" class="w3-btn w3-pink w3-ripple w3-round">Přihlásit se</a>
 {{pass}}
 
 {{if vzad:}}
-  <a href="{{=URL(args=pos - 1)}}" class="w3-btn w3-orange">{{=vzad}}</a>
+  <a href="{{=URL(args=pos - 1)}}" class="w3-btn w3-orange w3-ripple w3-round">{{=vzad}}</a>
 {{pass}}
 
 {{if tato:}}
-  <button class="w3-yellow">{{=tato}}</button>
+  <button class="w3-yellow w3-btn w3-round">{{=tato}}</button>
 {{pass}}
 
 {{if vpred:}}
-  <a href="{{=URL(args=pos + 1)}}" class="w3-btn w3-green">{{=vpred}}</a>
+  <a href="{{=URL(args=pos + 1)}}" class="w3-btn w3-green w3-ripple w3-round">{{=vpred}}</a>
 {{pass}}
 
 
