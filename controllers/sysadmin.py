@@ -83,3 +83,7 @@ def vlakna():
                             db.vlakno.insert(tema_id=tema1.id, vlakno=txt, url=url, aktivni=True, pos=pos)
                     pos += 1  # bez ohledu na posledni, aby se zbytečně neaktualizovalo pos
     return 'Ok.'
+
+@auth.requires_membership('admin')
+def seznam_vlaken():
+    return dict(grid=SQLFORM.grid(db.vlakno))
