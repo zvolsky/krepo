@@ -10,22 +10,22 @@
 <body>
 
 {{if auth.user:}}
-  <a href="#" id="menu" class="btn">&#9776;</a>
-  <a href="{{=URL('nastav')}}" id="nastav" class="btn hidden">Nastav</a>
+  <a href="#" id="menu" class="w3-btn">&#9776;</a>
+  <a href="{{=URL('nastav')}}" id="nastav" class="w3-btn w3-indigo hidden">Nastav</a>
 {{else:}}
-  <a href="{{=URL('user')}}" class="btn">Přihlásit se</a>
+  <a href="{{=URL('user')}}" class="w3-btn w3-pink">Přihlásit se</a>
 {{pass}}
 
 {{if vzad:}}
-  <a href="{{=URL(args=pos - 1)}}" class="btn">{{=vzad}}</a>
+  <a href="{{=URL(args=pos - 1)}}" class="w3-btn w3-orange">{{=vzad}}</a>
 {{pass}}
 
 {{if tato:}}
-  {{=tato}}
+  <button class="w3-yellow">{{=tato}}</button>
 {{pass}}
 
 {{if vpred:}}
-  <a href="{{=URL(args=pos + 1)}}" class="w3-btn">{{=vpred}}</a>
+  <a href="{{=URL(args=pos + 1)}}" class="w3-btn w3-green">{{=vpred}}</a>
 {{pass}}
 
 
@@ -44,16 +44,16 @@
 
 {{if ok:}}
   {{if nejsou_nove:}}
-    <p>Nejsou nové příspěvky.</p>
+    <p class="w3-teal">Nejsou nové příspěvky.</p>
   {{pass}}
   {{for prispevek in prispevky:}}
-    <p>
-      <span style="color: grey; padding-right: 12px;">{{=prispevek.get('aut', '')}}</span>
+    <div class="w3-{{if prispevek.get('old'):}}khaki{{else:}}lime{{pass}}" style="margin-bottom: 6px;">
+      <span class="w3-teal" style="padding-right: 12px;">{{=prispevek.get('aut', '')}}</span>
       {{=XML(prispevek.get('txt', ''))}}
-    </p>
+    </div>
   {{pass}}
 {{else:}}
-  <p>Selhalo načtení vlákna.</p>
+  <p class="w3-red">Selhalo načtení vlákna.</p>
 {{pass}}
 
 </body>

@@ -94,9 +94,7 @@ def index():
                                             _ok, prispevky, _nezacaly_nove = get_from_krepo(archivy[0], vcetne_archivu=False, archivy=archivy[1:])
 
                                     else:                         # zde můžeme mít už nabrané staré příspěvky - omezme jejich počet
-                                        prispevky = prispevky[-kontext:]  # ponechat jen kontext: pár posledních starých
-                                        for prispevek in prispevky:
-                                            prispevek['old'] = True
+                                        prispevky = zkrat_stare(prispevky)
 
                             potrebujeme_jeste_starsi = False
 
@@ -117,6 +115,12 @@ def index():
                 archivy.append(url)
                 break
         return archivy[:8]  # vzhledem k rekurzivnímu volání omezíme počet
+
+    def zkrat_stare(prispevky):
+        prispevky = prispevky[-kontext:]  # ponechat jen kontext: pár posledních starých
+        for prispevek in prispevky:
+            prispevek['old'] = True
+        return prispevky
 
     # seznam sledovaných
     nastavene = get_nastavene()
@@ -161,7 +165,7 @@ def index():
     if limit:
         prispevky = prispevky[-limit:]
     elif nezacaly_nove:
-        prispevky = prispevky[-kontext:]  # ponechat jen kontext: pár posledních starých
+        prispevky = zkrat_stare(prispevky)
 
     # zapsat čas posledního prohlížení
     if moje_nastaveni:
