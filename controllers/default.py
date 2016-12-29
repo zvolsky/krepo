@@ -11,9 +11,12 @@ def index():
     '''
         args(0) je aktuální pozice v nastavene (ve sledovaných)
     '''
+    def get_row_label(nastavene_row):
+        return nastavene_row.vlakno.kratce or nastavene_row.vlakno.vlakno.split(' ', 1)[0]
+
     def get_label(nastavene, pos):
         if 0 <= pos < len(nastavene):
-            return nastavene[pos].vlakno.kratce or nastavene[pos].vlakno.vlakno.split(' ', 1)[0]
+            return get_row_label(nastavene[pos])
         else:
             return None
 
@@ -138,7 +141,9 @@ def index():
 
     # aktuální pozice v seznamu sledovaných
     try:
-        pos = min(max(0, int(request.args(0))), len(nastavene) - 1)
+        pos = max(0, int(request.args(0)))
+        if pos >= len(nastavene):
+            pos = 0   # z posledního jdi na první, viz *1
     except (ValueError, TypeError):
         pos = 0
 
@@ -154,9 +159,12 @@ def index():
         limit = 15
 
     # buttony a label
+    all_pages = [get_row_label(nastavene_row) for nastavene_row in nastavene]
     tato = get_label(nastavene, pos)
     vzad = get_label(nastavene, pos - 1)
     vpred = get_label(nastavene, pos + 1)
+    if not vpred:
+        vpred = get_label(nastavene, 0)   # z posledního jdi na první, viz *1
 
     # stáhnout a extrahovat z k-report
     ok, prispevky, nezacaly_nove = get_from_krepo(nastavene[pos].vlakno.url, vcetne_archivu=not limit)
@@ -175,7 +183,7 @@ def index():
                 )
 
     return dict(pos=pos, tato=tato, vpred=vpred, vzad=vzad, ok=ok, prispevky=prispevky,
-                nejsou_nove=not limit and nezacaly_nove)
+                all_pages=all_pages, nejsou_nove=not limit and nezacaly_nove)
 
 
 @auth.requires_login()
