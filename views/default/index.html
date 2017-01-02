@@ -10,7 +10,7 @@
 <body>
 
 <div class="w3-row">
-<a href="{{=URL('nabidka')}}" class="w3-btn w3-ripple w3-round">&#8801;</a>
+<a href="{{=URL('nabidka', args=vlakno_id)}}" class="w3-btn w3-ripple w3-round">&#8801;</a>
 {{if auth.user:}}
   <a href="{{=URL('nastav')}}" id="nastav" class="w3-btn w3-indigo w3-ripple w3-round hidden">Nastav</a>
 {{else:}}

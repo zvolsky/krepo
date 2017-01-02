@@ -199,6 +199,7 @@ def index():
                     )
 
     return dict(pos=pos, tato=tato, vpred=vpred, vzad=vzad, ok=ok, prispevky=prispevky,
+                vlakno_id=vlakno.id if forced_by_id else nastavene[pos].vlakno.id,
                 all_pages=all_pages, nejsou_nove=not limit and nezacaly_nove)
 
 
@@ -208,9 +209,9 @@ def nabidka():
     rozvin_tema = None
     if request.args(0):   # parametr je vlakno, pro které promítneme (rozvinutá) všechna vlákna téhož tématu
         predvolene = db(db.vlakno.id == request.args(0)).select(db.tema.id,
-                db.tema.on(db.tema.id == db.vlakno.tema_id))
+                join=db.tema.on(db.tema.id == db.vlakno.tema_id)).first()
         if predvolene:
-            rozvin_tema = predvolene.tema.id
+            rozvin_tema = predvolene.id
     elif request.vars.get('tema'):
         rozvin_tema = request.vars.get('tema')
 

@@ -21,9 +21,9 @@
 </div>
 
 {{if vlakna:}}
-  <div class="w3-row">
+  <ul class="w3-ul w3-border">
     {{for vlakno in vlakna:}}
-      <a href="{{=URL('index', args=('id', vlakno.id))}}" class="w3-btn w3-green w3-ripple w3-round hidden">{{=vlakno.vlakno}}</a>
+      <li><a href="{{=URL('index', args=('id', vlakno.id))}}" class="w3-btn w3-green w3-ripple w3-round hidden">{{=vlakno.vlakno}}</a>
     {{pass}}
-  </div>
+  </ul>
 {{pass}}
