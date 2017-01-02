@@ -269,6 +269,7 @@
 'Internal State': 'Vnitřní stav',
 'Introduction': 'Úvod',
 'Invalid email': 'Neplatný email',
+'Invalid login': 'Invalid login',
 'Invalid password': 'Nesprávné heslo',
 'invalid password.': 'neplatné heslo',
 'Invalid Query': 'Neplatný dotaz',

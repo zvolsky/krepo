@@ -10,13 +10,15 @@ USER_FOR_DEFAULT_SETTING = 'krepo.default@zitranavylet.cz'
 def index():
     '''
         args(0) je aktuální pozice v nastavene (ve sledovaných)
+        nebo
+        args(0)=='id', args(1) je id vlakna (při prohlížení nesledovaných)
     '''
     def get_row_label(nastavene_row):
-        return nastavene_row.vlakno.kratce or nastavene_row.vlakno.vlakno.split(' ', 1)[0]
+        return nastavene_row.kratce or nastavene_row.vlakno.split(' ', 1)[0]
 
     def get_label(nastavene, pos):
         if 0 <= pos < len(nastavene):
-            return get_row_label(nastavene[pos])
+            return get_row_label(nastavene[pos].vlakno)
         else:
             return None
 
@@ -139,16 +141,23 @@ def index():
         if not len(nastavene):
             return "Nebylo nalezeno defaultní nastavení krepo.default. Informuj prosím administrátora: zvolsky@seznam.cz."
 
-    # aktuální pozice v seznamu sledovaných
-    try:
-        pos = max(0, int(request.args(0)))
-        if pos >= len(nastavene):
-            pos = 0   # z posledního jdi na první, viz *1
-    except (ValueError, TypeError):
+    forced_by_id = False
+    if request.args(0) == 'id':
+        vlakno = db(db.vlakno.id == request.args(1)).select(db.vlakno.ALL).first()
+        if vlakno:
+            forced_by_id = True
         pos = 0
+    else:
+        # aktuální pozice v seznamu sledovaných
+        try:
+            pos = max(0, int(request.args(0)))
+            if pos >= len(nastavene):
+                pos = 0   # z posledního jdi na první, viz *1
+        except (ValueError, TypeError):
+            pos = 0
 
     # počet příspěvků
-    if moje_nastaveni:
+    if moje_nastaveni and not forced_by_id:
         dosud_naposled = nastavene[pos].user_vlakno.naposled
         if dosud_naposled:
             limit = 0
@@ -159,7 +168,7 @@ def index():
         limit = 15
 
     # buttony a label
-    all_pages = [get_row_label(nastavene_row) for nastavene_row in nastavene]
+    all_pages = [get_row_label(nastavene_row.vlakno) for nastavene_row in nastavene]
     tato = get_label(nastavene, pos)
     vzad = get_label(nastavene, pos - 1)
     vpred = get_label(nastavene, pos + 1)
@@ -167,7 +176,8 @@ def index():
         vpred = get_label(nastavene, 0)   # z posledního jdi na první, viz *1
 
     # stáhnout a extrahovat z k-report
-    ok, prispevky, nezacaly_nove = get_from_krepo(nastavene[pos].vlakno.url, vcetne_archivu=not limit)
+    ok, prispevky, nezacaly_nove = get_from_krepo(
+            vlakno.url if forced_by_id else nastavene[pos].vlakno.url, vcetne_archivu=not limit)
 
     # omezit počet zobrazených; při aktualizacích zjistit, jestli jsou nějaké nové
     if limit:
@@ -177,13 +187,38 @@ def index():
 
     # zapsat čas posledního prohlížení
     if moje_nastaveni:
-        db((db.user_vlakno.auth_user_id == auth.user_id) &
-                (db.user_vlakno.id == nastavene[pos].user_vlakno.id)).update(
-                naposled=nove_naposled
-                )
+        if forced_by_id:
+            db((db.user_vlakno.auth_user_id == auth.user_id) &
+                    (db.user_vlakno.vlakno_id == vlakno.id)).update(
+                    naposled=nove_naposled
+                    )
+        else:
+            db((db.user_vlakno.auth_user_id == auth.user_id) &
+                    (db.user_vlakno.id == nastavene[pos].user_vlakno.id)).update(
+                    naposled=nove_naposled
+                    )
 
     return dict(pos=pos, tato=tato, vpred=vpred, vzad=vzad, ok=ok, prispevky=prispevky,
                 all_pages=all_pages, nejsou_nove=not limit and nezacaly_nove)
+
+
+def nabidka():
+    temata = db().select(db.tema.ALL, orderby=db.tema.pos)
+    vlakna = None
+    rozvin_tema = None
+    if request.args(0):   # parametr je vlakno, pro které promítneme (rozvinutá) všechna vlákna téhož tématu
+        predvolene = db(db.vlakno.id == request.args(0)).select(db.tema.id,
+                db.tema.on(db.tema.id == db.vlakno.tema_id))
+        if predvolene:
+            rozvin_tema = predvolene.tema.id
+    elif request.vars.get('tema'):
+        rozvin_tema = request.vars.get('tema')
+
+    if rozvin_tema:
+        temata = [tema for tema in temata if tema.id != rozvin_tema]
+        vlakna = db(db.vlakno.tema_id == rozvin_tema).select(db.vlakno.id, db.vlakno.vlakno)
+
+    return dict(temata=temata, vlakna=vlakna)
 
 
 @auth.requires_login()
