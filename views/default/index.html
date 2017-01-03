@@ -30,14 +30,14 @@
   {{if nejsou_nove:}}
     <p class="w3-teal">Nejsou nové příspěvky.</p>
   {{pass}}
-  {{for prispevek in prispevky:}}
-    <div class="w3-rest w3-container">
+  <div class="w3-rest w3-container">
+    {{for prispevek in prispevky:}}
       <div class="w3-{{if prispevek.get('old'):}}khaki{{else:}}lime{{pass}}" style="margin-bottom: 10px;">
         <span class="w3-teal" style="padding-right: 12px;">{{=prispevek.get('aut', '')}}</span>
         {{=XML(prispevek.get('txt', ''))}}
       </div>
-    </div>
-  {{pass}}
+    {{pass}}
+  </div>
 {{else:}}
   <p class="w3-red">Selhalo načtení vlákna.</p>
 {{pass}}
