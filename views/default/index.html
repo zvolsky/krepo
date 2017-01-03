@@ -30,7 +30,7 @@
   {{if nejsou_nove:}}
     <p class="w3-teal">Nejsou nové příspěvky.</p>
   {{pass}}
-  <div class="w3-col w3-container" style="width:0px"></div>
+  <div class="w3-col w3-container" style="width:10px; display:none"></div>
   <div class="w3-rest w3-container">
     {{for prispevek in prispevky:}}
       <div class="w3-{{if prispevek.get('old'):}}khaki{{else:}}lime{{pass}}" style="margin-bottom: 10px;">
