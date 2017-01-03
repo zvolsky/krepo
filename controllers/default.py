@@ -238,7 +238,7 @@ def nabidka():
 
     return dict(temata=temata, vlakna=vlakna,
                 vlakno_id=vlakno_id or '-', return_pos=request.args(1) or 0,
-                fs=fs, fs2=int(12*min(100, fs)/100))
+                fs=fs, fs2=int(12*min(100, (fs or 100))/100))
 
 
 @auth.requires_login()
