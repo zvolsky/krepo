@@ -200,15 +200,27 @@ def index():
 
     return dict(pos=pos, tato=tato, vpred=vpred, vzad=vzad, ok=ok, prispevky=prispevky,
                 vlakno_id=vlakno.id if forced_by_id else nastavene[pos].vlakno.id,
-                all_pages=all_pages, nejsou_nove=not limit and nezacaly_nove, fs=150)
+                all_pages=all_pages, nejsou_nove=not limit and nezacaly_nove, fs=session.fs or 150)
 
 
 def nabidka():
+    fs = session.fs or 150
+    if request.args(3):
+        if request.args(3) == 'plus':
+            fs = min(1000, int(fs * 1.1))
+        elif request.args(3) == 'minus':
+            fs = min(10, int(fs / 1.1))
+        session.fs = fs
+
     temata = db().select(db.tema.ALL, orderby=db.tema.pos)
     vlakna = None
     rozvin_tema = None
-    if request.args(0):   # parametr je vlakno, pro které promítneme (rozvinutá) všechna vlákna téhož tématu
-        predvolene = db(db.vlakno.id == request.args(0)).select(db.tema.id,
+    try:
+        vlakno_id = int(request.args(0))
+    except Exception:
+        vlakno_id = None
+    if vlakno_id is not None:   # parametr je vlakno, pro které promítneme (rozvinutá) všechna vlákna téhož tématu
+        predvolene = db(db.vlakno.id == vlakno_id).select(db.tema.id,
                 join=db.tema.on(db.tema.id == db.vlakno.tema_id)).first()
         if predvolene:
             rozvin_tema = predvolene.id
@@ -220,7 +232,8 @@ def nabidka():
         vlakna = db(db.vlakno.tema_id == rozvin_tema).select(db.vlakno.id, db.vlakno.vlakno,
                                 orderby=db.vlakno.pos)
 
-    return dict(temata=temata, vlakna=vlakna, return_pos=request.args(1) or 0, fs=150)
+    return dict(temata=temata, vlakna=vlakna,
+                vlakno_id=vlakno_id or '-', return_pos=request.args(1) or 0, fs=fs)
 
 
 @auth.requires_login()
