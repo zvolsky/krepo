@@ -202,7 +202,7 @@ def index():
     return dict(pos=pos, tato=tato, vpred=vpred, vzad=vzad, ok=ok, prispevky=prispevky,
                 vlakno_id=vlakno.id if forced_by_id else nastavene[pos].vlakno.id,
                 all_pages=all_pages, nejsou_nove=not limit and nezacaly_nove,
-                fs=fs, fs2=int(12*min(100, fs)/100))
+                fs=fs, fs2=int(12*max(100, fs)/100))
 
 
 def nabidka():
@@ -238,7 +238,7 @@ def nabidka():
 
     return dict(temata=temata, vlakna=vlakna,
                 vlakno_id=vlakno_id or '-', return_pos=request.args(1) or 0,
-                fs=fs, fs2=int(12*min(100, (fs or 100))/100))
+                fs=fs, fs2=int(12*max(100, (fs or 100))/100))
 
 
 @auth.requires_login()
