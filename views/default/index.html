@@ -7,7 +7,7 @@
   <!--link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css"-->
   <title>K-Report čtečka</title>
 </head>
-<body>
+<body style="font-size:{{=fs}}%;">
 
 <header class="w3-row">
   <a href="{{=URL('nabidka', args=(vlakno_id, pos))}}" class="w3-btn w3-ripple w3-round">&#8801;</a>
@@ -30,15 +30,12 @@
   {{if nejsou_nove:}}
     <p class="w3-teal">Nejsou nové příspěvky.</p>
   {{pass}}
-  <div class="w3-col w3-container" style="width:10px; display:none"></div>
-  <div class="w3-rest w3-container">
-    {{for prispevek in prispevky:}}
-      <div class="w3-{{if prispevek.get('old'):}}khaki{{else:}}lime{{pass}}" style="margin-bottom: 10px;">
-        <span class="w3-teal" style="padding-right: 12px;">{{=prispevek.get('aut', '')}}</span>
-        {{=XML(prispevek.get('txt', ''))}}
-      </div>
-    {{pass}}
-  </div>
+  {{for prispevek in prispevky:}}
+    <div class="w3-{{if prispevek.get('old'):}}khaki{{else:}}lime{{pass}}" style="margin-bottom: 10px;">
+      <span class="w3-teal" style="padding-right: 12px;">{{=prispevek.get('aut', '')}}</span>
+      {{=XML(prispevek.get('txt', ''))}}
+    </div>
+  {{pass}}
 {{else:}}
   <p class="w3-red">Selhalo načtení vlákna.</p>
 {{pass}}
