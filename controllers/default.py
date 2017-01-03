@@ -198,19 +198,23 @@ def index():
                     naposled=nove_naposled
                     )
 
+    fs = session.fs or 150
     return dict(pos=pos, tato=tato, vpred=vpred, vzad=vzad, ok=ok, prispevky=prispevky,
                 vlakno_id=vlakno.id if forced_by_id else nastavene[pos].vlakno.id,
-                all_pages=all_pages, nejsou_nove=not limit and nezacaly_nove, fs=session.fs or 150)
+                all_pages=all_pages, nejsou_nove=not limit and nezacaly_nove,
+                fs=fs, fs2=int(12*min(100, fs)/100))
 
 
 def nabidka():
-    fs = session.fs or 150
     if request.args(2):
+        fs = session.fs or 150
         if request.args(2) == 'plus':
             fs = min(1000, int(fs * 1.1))
         elif request.args(2) == 'minus':
             fs = max(10, int(fs / 1.1))
         session.fs = fs
+    else:
+        fs = None
 
     temata = db().select(db.tema.ALL, orderby=db.tema.pos)
     vlakna = None
@@ -233,7 +237,8 @@ def nabidka():
                                 orderby=db.vlakno.pos)
 
     return dict(temata=temata, vlakna=vlakna,
-                vlakno_id=vlakno_id or '-', return_pos=request.args(1) or 0, fs=fs)
+                vlakno_id=vlakno_id or '-', return_pos=request.args(1) or 0,
+                fs=fs, fs2=int(12*min(100, fs)/100))
 
 
 @auth.requires_login()

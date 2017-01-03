@@ -9,7 +9,7 @@
 </head>
 <body style="font-size:{{=fs}}%;">
 
-<header class="w3-row">
+<header class="w3-row" style="font-size:{{=fs2}}px;">
   <a href="{{=URL('nabidka', args=(vlakno_id, pos))}}" class="w3-btn w3-ripple w3-round">&#8801;</a>
 
   {{if vzad:}}
@@ -31,7 +31,7 @@
     <p class="w3-teal">Nejsou nové příspěvky.</p>
   {{pass}}
   {{for prispevek in prispevky:}}
-    <div class="w3-{{if prispevek.get('old'):}}khaki{{else:}}lime{{pass}}" style="margin-bottom: 10px;">
+    <div class="w3-{{if prispevek.get('old'):}}khaki{{else:}}lime{{pass}}" style="margin-bottom: 10px; padding: 0 3px;">
       <span class="w3-teal" style="padding-right: 12px;">{{=prispevek.get('aut', '')}}</span>
       {{=XML(prispevek.get('txt', ''))}}
     </div>
@@ -41,7 +41,7 @@
 {{pass}}
 </article>
 
-<footer class="w3-row">
+<footer class="w3-row" style="font-size:{{=fs2}}px;">
   {{for pgpos, pg in enumerate(all_pages[pos+1:]):}}
     <a href="{{=URL(args=pgpos+pos+1)}}" class="w3-btn w3-green w3-ripple w3-round">{{=pg}}</a>
   {{pass}}
