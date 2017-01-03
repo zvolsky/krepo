@@ -164,6 +164,8 @@ def index():
             kontext = 2                     # kontext: kolik starých ponecháme
         else:
             limit = 5
+    elif str(request.args(1)) == 'all':
+        limit = -1  # all
     else:
         limit = 15
 
@@ -181,7 +183,8 @@ def index():
 
     # omezit počet zobrazených; při aktualizacích zjistit, jestli jsou nějaké nové
     if limit:
-        prispevky = prispevky[-limit:]
+        if limit > 0:
+            prispevky = prispevky[-limit:]
     elif nezacaly_nove:
         prispevky = zkrat_stare(prispevky)
 
