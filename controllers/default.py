@@ -141,11 +141,11 @@ def index():
         if not len(nastavene):
             return "Nebylo nalezeno defaultní nastavení krepo.default. Informuj prosím administrátora: zvolsky@seznam.cz."
 
-    forced_by_id = False
+    forced_by_id = None
     if request.args(0) == 'id':
         vlakno = db(db.vlakno.id == request.args(1)).select(db.vlakno.ALL).first()
         if vlakno:
-            forced_by_id = True
+            forced_by_id = get_row_label(vlakno)
         pos = 0
     else:
         # aktuální pozice v seznamu sledovaných
@@ -160,11 +160,11 @@ def index():
     if moje_nastaveni and not forced_by_id:
         dosud_naposled = nastavene[pos].user_vlakno.naposled
         if dosud_naposled:
-            limit = 0
-            kontext = 2                     # kontext: kolik starých ponecháme
+            limit = 0       # speciální režim: jen aktualizace
+            kontext = 2     # kontext: kolik starých ponecháme
         else:
             limit = 5
-    elif str(request.args(1)) == 'all':
+    elif str(request.args(2)) == 'all':
         limit = -1  # all
     else:
         limit = 15
@@ -205,7 +205,7 @@ def index():
     return dict(pos=pos, tato=tato, vpred=vpred, vzad=vzad, ok=ok, prispevky=prispevky,
                 vlakno_id=vlakno.id if forced_by_id else nastavene[pos].vlakno.id,
                 all_pages=all_pages, nejsou_nove=not limit and nezacaly_nove,
-                fs=fs, fs2=int(12*max(100, fs)/100))
+                forced_by_id=forced_by_id, fs=fs, fs2=int(12*max(100, fs)/100))
 
 
 def nabidka():
