@@ -205,11 +205,11 @@ def index():
 
 def nabidka():
     fs = session.fs or 150
-    if request.args(3):
-        if request.args(3) == 'plus':
+    if request.args(2):
+        if request.args(2) == 'plus':
             fs = min(1000, int(fs * 1.1))
-        elif request.args(3) == 'minus':
-            fs = min(10, int(fs / 1.1))
+        elif request.args(2) == 'minus':
+            fs = max(10, int(fs / 1.1))
         session.fs = fs
 
     temata = db().select(db.tema.ALL, orderby=db.tema.pos)
