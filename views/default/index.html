@@ -10,38 +10,20 @@
 <body>
 
 <div class="w3-row">
-<a href="{{=URL('nabidka', args=vlakno_id)}}" class="w3-btn w3-ripple w3-round">&#8801;</a>
-{{if auth.user:}}
-  <a href="{{=URL('nastav')}}" id="nastav" class="w3-btn w3-indigo w3-ripple w3-round hidden">Nastav</a>
-{{else:}}
-  <a href="{{=URL('user')}}" class="w3-btn w3-pink w3-ripple w3-round">Přihlásit se</a>
-{{pass}}
+  <a href="{{=URL('nabidka', args=(vlakno_id, pos))}}" class="w3-btn w3-ripple w3-round">&#8801;</a>
 
-{{if vzad:}}
-  <a href="{{=URL(args=pos - 1)}}" class="w3-btn w3-orange w3-ripple w3-round">{{=vzad}}</a>
-{{pass}}
+  {{if vzad:}}
+    <a href="{{=URL(args=pos - 1)}}" class="w3-btn w3-orange w3-ripple w3-round">{{=vzad}}</a>
+  {{pass}}
 
-{{if tato:}}
-  <button class="w3-yellow w3-btn w3-round">{{=tato}}</button>
-{{pass}}
+  {{if tato:}}
+    <button class="w3-yellow w3-btn w3-round">{{=tato}}</button>
+  {{pass}}
 
-{{if vpred:}}
-  <a href="{{=URL(args=pos + 1)}}" class="w3-btn w3-green w3-ripple w3-round">{{=vpred}}</a>
-{{pass}}
+  {{if vpred:}}
+    <a href="{{=URL(args=pos + 1)}}" class="w3-btn w3-green w3-ripple w3-round">{{=vpred}}</a>
+  {{pass}}
 </div>
-
-
-<style>
-  .hidden {display: none;}
-</style>
-<script>
-  document.getElementById('menu').addEventListener("click", function(evt) {
-    evt.preventDefault();
-    document.getElementById('menu').className += " hidden";
-    var elNastav = document.getElementById('nastav');
-    elNastav.className = elNastav.className.replace( /(?:^|\s)hidden(?!\S)/g , '' );
-  });
-</script>
 
 <div class="w3-row">
 {{if ok:}}
@@ -49,9 +31,11 @@
     <p class="w3-teal">Nejsou nové příspěvky.</p>
   {{pass}}
   {{for prispevek in prispevky:}}
-    <div class="w3-{{if prispevek.get('old'):}}khaki{{else:}}lime{{pass}}" style="margin-bottom: 10px;">
-      <span class="w3-teal" style="padding-right: 12px;">{{=prispevek.get('aut', '')}}</span>
-      {{=XML(prispevek.get('txt', ''))}}
+    <div class="w3-rest w3-container">
+      </div><div class="w3-{{if prispevek.get('old'):}}khaki{{else:}}lime{{pass}}" style="margin-bottom: 10px;">
+        <span class="w3-teal" style="padding-right: 12px;">{{=prispevek.get('aut', '')}}</span>
+        {{=XML(prispevek.get('txt', ''))}}
+      </div>
     </div>
   {{pass}}
 {{else:}}
@@ -66,6 +50,7 @@
   {{for pgpos, pg in enumerate(all_pages[:pos]):}}
     <a href="{{=URL(args=pgpos)}}" class="w3-btn w3-orange w3-ripple w3-round">{{=pg}}</a>
   {{pass}}
+  <a href="{{=URL('nabidka', args=(vlakno_id, pos))}}" class="w3-btn w3-ripple w3-round">&#8801;</a>
 </div>
 
 </body>

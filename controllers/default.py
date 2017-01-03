@@ -217,9 +217,10 @@ def nabidka():
 
     if rozvin_tema:
         temata = [tema for tema in temata if tema.id != rozvin_tema]
-        vlakna = db(db.vlakno.tema_id == rozvin_tema).select(db.vlakno.id, db.vlakno.vlakno)
+        vlakna = db(db.vlakno.tema_id == rozvin_tema).select(db.vlakno.id, db.vlakno.vlakno,
+                                orderby=db.vlakno.pos)
 
-    return dict(temata=temata, vlakna=vlakna)
+    return dict(temata=temata, vlakna=vlakna, return_pos=request.args(1) or 0)
 
 
 @auth.requires_login()
