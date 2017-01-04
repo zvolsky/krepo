@@ -1,6 +1,6 @@
 {{extend 'layout.html'}}
 
-<a class="btn btn-default" href="{{=URL('index')}}">Vyzkoušej aktuální nastavení</a>
+<a class="btn btn-default" href="{{=URL('index')}}">Číst příspěvky</a>
 
 <div class="well">
 {{if nastavene:}}
@@ -33,15 +33,17 @@
 {{last = ''}}
 {{for vlakno in vse:}}
   {{if last != vlakno.tema.tema:}}
+    {{if last:}}</ul>{{pass}}
     {{last = vlakno.tema.tema}}
-    <h3>{{=last}}</h3>
+    <h3>{{=last}}</h3><ul class="list-unstyled">
   {{pass}}
 
-  <div>
-  {{if vlakno.vlakno.id in nastavene_ids:}}
-    {{=vlakno.vlakno.vlakno}}
-  {{else:}}
-    <a href="{{=URL('sleduj', args=vlakno.vlakno.id)}}">{{=vlakno.vlakno.vlakno}}</a>
-  {{pass}}
-  </div>
+  <li><big>
+    {{if vlakno.vlakno.id in nastavene_ids:}}
+      {{=vlakno.vlakno.vlakno}}
+    {{else:}}
+      <a href="{{=URL('sleduj', args=vlakno.vlakno.id)}}">{{=vlakno.vlakno.vlakno}}</a>
+    {{pass}}
+    </big>
 {{pass}}
+</ul>
