@@ -221,6 +221,7 @@ def nabidka():
 
     temata = db().select(db.tema.ALL, orderby=db.tema.pos)
     vlakna = None
+    vlakno_url = None
     rozvin_tema = None
     try:
         vlakno_id = int(request.args(0))
@@ -236,11 +237,15 @@ def nabidka():
 
     if rozvin_tema:
         temata = [tema for tema in temata if tema.id != rozvin_tema]
-        vlakna = db(db.vlakno.tema_id == rozvin_tema).select(db.vlakno.id, db.vlakno.vlakno,
+        vlakna = db(db.vlakno.tema_id == rozvin_tema).select(db.vlakno.id, db.vlakno.vlakno, db.vlakno.url,
                                 orderby=db.vlakno.pos)
-
+        if vlakno_id:
+            for vl in vlakna:
+                if vl.id == vlakno_id:
+                    vlakno_url = vl.url  # zpřístupni odkaz do K-Report + js link na aktuální
+                    break
     return dict(temata=temata, vlakna=vlakna,
-                vlakno_id=vlakno_id or '-', return_pos=request.args(1) or 0,
+                vlakno_id=vlakno_id or '-', vlakno_url=vlakno_url, return_pos=request.args(1) or 0,
                 fs=fs, fs2=int(12*max(100, (fs or 100))/100))
 
 
