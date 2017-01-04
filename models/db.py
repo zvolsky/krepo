@@ -88,6 +88,12 @@ auth = Auth(db, host_names=myconf.get('host.names'))
 service = Service()
 plugins = PluginManager()
 
+#mz ++z
+auth.settings.extra_fields['auth_user'] = [
+    Field('fs', 'integer', readable=False, writable=False, default=150),
+    ]
+#mz ++k
+
 # -------------------------------------------------------------------------
 # create all tables needed by auth if not custom tables
 # -------------------------------------------------------------------------
