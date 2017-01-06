@@ -157,15 +157,15 @@ def index():
             pos = 0
 
     # počet příspěvků
-    if moje_nastaveni and not forced_by_id:
+    if str(request.args(2)) == 'all':
+        limit = -1  # all
+    elif moje_nastaveni and not forced_by_id:
         dosud_naposled = nastavene[pos].user_vlakno.naposled
         if dosud_naposled:
             limit = 0       # speciální režim: jen aktualizace
             kontext = 2     # kontext: kolik starých ponecháme
         else:
             limit = 5
-    elif str(request.args(2)) == 'all':
-        limit = -1  # all
     else:
         limit = 15
 

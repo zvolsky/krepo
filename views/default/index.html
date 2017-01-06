@@ -55,11 +55,18 @@
 
 <footer class="btnRow w3-row">
   {{for pgpos, pg in enumerate(all_pages[pos+1:]):}}
-    <a href="{{=URL(args=pgpos+pos+1)}}" class="w3-btn w3-green w3-ripple w3-round">{{=pg}}</a>
+    <a href="{{=URL(args=pgpos+pos+1)}}" class="w3-btn w3-green w3-ripple w3-round{{if not pgspos:}} w3-xlarge{{pass}}">{{=pg}}</a>
   {{pass}}
   {{for pgpos, pg in enumerate(all_pages[:pos]):}}
     <a href="{{=URL(args=pgpos)}}" class="w3-btn w3-orange w3-ripple w3-round">{{=pg}}</a>
   {{pass}}
+
+  {{if forced_by_id:}}
+    <a href="{{=URL(args=('id', vlakno_id, 'all'))}}" class="w3-yellow w3-btn w3-round">{{=forced_by_id}}</a>
+  {{elif tato:}}
+    <a href="{{=URL(args=(pos, 0, 'all'))}}" class="w3-yellow w3-btn w3-round">{{=tato}}</a>
+  {{pass}}
+
   <a href="{{=URL('nabidka', args=(vlakno_id, pos))}}" class="w3-btn w3-ripple w3-round">&#8801;</a>
 </footer>
 
