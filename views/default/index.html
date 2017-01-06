@@ -55,7 +55,7 @@
 
 <footer class="btnRow w3-row">
   {{for pgpos, pg in enumerate(all_pages[pos+1:]):}}
-    <a href="{{=URL(args=pgpos+pos+1)}}" class="w3-btn w3-green w3-ripple w3-round{{if not pgspos:}} w3-xlarge{{pass}}">{{=pg}}</a>
+    <a href="{{=URL(args=pgpos+pos+1)}}" class="w3-btn w3-green w3-ripple w3-round{{if not pgpos:}} w3-xlarge{{pass}}">{{=pg}}</a>
   {{pass}}
   {{for pgpos, pg in enumerate(all_pages[:pos]):}}
     <a href="{{=URL(args=pgpos)}}" class="w3-btn w3-orange w3-ripple w3-round">{{=pg}}</a>
