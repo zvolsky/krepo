@@ -12,3 +12,4 @@ udělej:
   - server/krepo/sysadmin/vlakna,  # Ok.
   - server/krepo/default/nastav,
   - nastav defaultní diskuze
+  - server/krepo/plugin_manage_groups/index mohu přidat adminy kromě krepo.default@...
