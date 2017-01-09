@@ -8,5 +8,7 @@ udělej:
   - server/krepo/default/user/register,
   - zaregistruj mail někam na vlastní doménu: krepo.default@zitranavylet.cz,
   - server/krepo/default/user/login, přihlaš krepo.default@...
+  - server/krepo/sysadmin/temata,  # Ok.
+  - server/krepo/sysadmin/vlakna,  # Ok.
   - server/krepo/default/nastav,
   - nastav defaultní diskuze
