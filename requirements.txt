@@ -1,3 +1,9 @@
 requests
 lxml (nejprve: apt install python-dev (python3-dev) libxml2-dev libxslt1-dev zlib1g-dev)
 bs4
+
+-----------------
+pokud: server/krepo: Nebylo nalezeno defaultní nastavení krepo.default...
+udělej: server/krepo/default/user/register, a zaregistruj krepo.default
+  mail někam na vlastní doménu: krepo.default@zitranavylet.cz
+  přihlaš krepo.default@... a Nastav defaultní diskuze

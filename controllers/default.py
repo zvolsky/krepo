@@ -4,7 +4,7 @@ import bs4
 import requests
 
 
-USER_FOR_DEFAULT_SETTING = 'krepo.default@zitranavylet.cz'
+USER_FOR_DEFAULT_SETTING = 'krepo.default@'
 
 
 def index():
@@ -134,7 +134,7 @@ def index():
         nove_naposled = datetime.datetime.now() - datetime.timedelta(seconds=10)  # radši kousek zpět
     else:
         moje_nastaveni = False
-        corr_user = db(db.auth_user.email == USER_FOR_DEFAULT_SETTING).select(db.auth_user.id).first()
+        corr_user = db(db.auth_user.email.startswith(USER_FOR_DEFAULT_SETTING)).select(db.auth_user.id).first()
         if corr_user:
             auth.corrected_user_id = corr_user.id
             nastavene = get_nastavene()
