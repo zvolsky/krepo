@@ -4,6 +4,9 @@ bs4
 
 -----------------
 pokud: server/krepo: Nebylo nalezeno defaultní nastavení krepo.default...
-udělej: server/krepo/default/user/register, a zaregistruj krepo.default
-  mail někam na vlastní doménu: krepo.default@zitranavylet.cz
-  přihlaš krepo.default@... a Nastav defaultní diskuze
+udělej:
+  - server/krepo/default/user/register,
+  - zaregistruj mail někam na vlastní doménu: krepo.default@zitranavylet.cz,
+  - server/krepo/default/user/login, přihlaš krepo.default@...
+  - server/krepo/default/nastav,
+  - nastav defaultní diskuze
