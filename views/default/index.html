@@ -1,6 +1,6 @@
 {{block head}}
   <style>
-    .prispevek {margin-bottom: 10px; padding: 0 3px; overflow-x: hidden;}
+    .prispevek {margin-bottom: 10px;}
   </style>
 {{end}}
 
@@ -35,7 +35,7 @@
     <p class="w3-teal">Nejsou nové příspěvky.</p>
   {{pass}}
   {{for prispevek in prispevky:}}
-    <div class="prispevek w3-{{if prispevek.get('old'):}}khaki{{else:}}lime{{pass}}">
+    <div class="fwt prispevek w3-{{if prispevek.get('old'):}}khaki{{else:}}lime{{pass}}">
       <span class="w3-teal" style="padding-right: 12px;">{{=prispevek.get('aut', '')}}</span>
       {{=XML(prispevek.get('txt', ''))}}
     </div>
