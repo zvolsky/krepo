@@ -1,18 +1,10 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/krepo/static/css/w3.css"/>
-  <!--link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css"-->
-  <title>K-Report čtečka</title>
-
+{{block head}}
   <style>
     .prispevek {margin-bottom: 10px; padding: 0 3px; overflow-x: hidden;}
-    .btnRow {font-size:{{=fs2}}px;}
   </style>
-</head>
-<body style="font-size:{{=fs}}%;">
+{{end}}
+
+{{extend 'layout_w3.html'}}
 
 <header class="btnRow w3-row">
   <a href="{{=URL('nabidka', args=(vlakno_id, pos))}}" class="w3-btn w3-ripple w3-round">&#8801;</a>

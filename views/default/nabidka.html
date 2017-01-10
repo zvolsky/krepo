@@ -1,13 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/krepo/static/css/w3.css"/>
-  <!--link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css"-->
-  <title>K-Report čtečka</title>
-</head>
-<body style="font-size:{{=fs2}}px;">
+{{extend 'layout_w3.html'}}
 
 <div class="w3-row">
   <a href="{{=URL('index', args=return_pos)}}" class="w3-btn w3-indigo w3-ripple w3-round">Zpět</a>
@@ -44,6 +35,3 @@
     document.getElementById('thisIsCurrent').scrollIntoView();
   });
 </script>
-
-</body>
-</html>

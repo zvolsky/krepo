@@ -201,22 +201,21 @@ def index():
                     naposled=nove_naposled
                     )
 
-    fs = session.fs or auth.user and auth.user.fs or 150
     return dict(pos=pos, tato=tato, vpred=vpred, vzad=vzad, ok=ok, prispevky=prispevky,
                 vlakno_id=vlakno.id if forced_by_id else nastavene[pos].vlakno.id,
                 all_pages=all_pages, nejsou_nove=not limit and nezacaly_nove,
-                forced_by_id=forced_by_id, fs=fs, fs2=int(12*max(100, fs)/100))
+                forced_by_id=forced_by_id, fs=None, w3={'w3'})
 
 
 def fontsize():
-    fs1 = session.fs or auth.user and auth.user.fs or 150
+    fs1 = session.fs or auth.user and auth.user.fs or 14
     if request.args(1):
         if request.args(1) == 'plus':
             fs1 = min(1000, int(fs1 * 1.1))
         elif request.args(1) == 'minus':
             fs1 = max(10, int(fs1 / 1.1))
         session.fs = fs1
-    return dict(return_pos=request.args(0), fs=int(12*fs1/100), fs2=int(12*max(100, fs1)/100))
+    return dict(return_pos=request.args(0), fs=fs1, fs2=max(12, fs1), w3={'w3'})
 
 
 def nabidka():
@@ -247,7 +246,7 @@ def nabidka():
                     break
     return dict(temata=temata, vlakna=vlakna,
                 vlakno_id=vlakno_id or '-', vlakno_url=vlakno_url, return_pos=request.args(1) or 0,
-                fs2=int(12*max(100, (session.fs or auth.user and auth.user.fs or 150))/100))
+                fs=None, w3={'w3'})
 
 
 @auth.requires_login()

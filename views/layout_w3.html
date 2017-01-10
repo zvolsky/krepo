@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{=response.title or request.application}}</title>
+  {{include 'web2py_ajax_w3.html'}} <!-- this includes w3.css(mz++), jquery.js, calendar.js/.css and web2py.js -->
+  {{block head}}{{end}}
+</head>
+
+{{if 'fs' in locals():}}
+  {{if not fs:}}
+    {{fs=session and session.fs or auth.user and auth.user.fs or 14}}
+  {{pass}}
+<style>
+  .btnRow {font-size:{{=max(12, fs)}}px;}
+</style>
+<body style="font-size:{{=fs}}px;">
+{{else:}}
+<body>
+{{pass}}
+
+{{block center}}
+{{include}}
+{{end}}
+
+</body>
+</html>
