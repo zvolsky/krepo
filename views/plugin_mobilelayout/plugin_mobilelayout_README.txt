@@ -1,6 +1,9 @@
 plugin_mobilelayout
 -------------------
 
+Add static/css/w3.css, static/js/vue.min.js.
+Use {{extend 'plugin_mobilelayout.html'}} in your view.
+
 Controller can return: js, fs
 
 without js: no js/css supports will be added
