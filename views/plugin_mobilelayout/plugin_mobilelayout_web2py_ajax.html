@@ -9,28 +9,28 @@
         var ajax_error_500 = '{{=T.M('An error occured, please [[reload %s]] the page') % URL(args=request.args, vars=request.get_vars) }}'
         //--></script>
     {{
-    response.files.insert(0,URL('static','js/web2py.js'))
+    response.files.insert(0, URL('static', 'js/web2py.js'))
     }}
 {{pass}}
 {{if 'calendar' in js:}}
     {{
-    response.files.insert(0,URL('static','js/calendar.js'))
-    response.files.insert(0,URL('static','css/calendar.css'))
+    response.files.insert(0, URL('static', 'js/calendar.js'))
+    response.files.insert(0, URL('static', 'css/calendar.css'))
     }}
 {{pass}}
 {{if 'jquery' in js:}}
     {{
-    response.files.insert(0,URL('static','js/jquery.js'))
+    response.files.insert(0, URL('static', 'js/jquery.js'))
     }}
 {{pass}}
 {{if 'vue' in js:}}
     {{
-    response.files.insert(0,URL('static','js/vue.js'))
+    response.files.insert(0, URL('static', 'js/vue.min.js'))
     }}
 {{pass}}
 {{if 'w3' in js:}}
     {{
-    response.files.insert(0,URL('static','css/w3.css'))
+    response.files.insert(0, URL('static', 'css/w3.css'))
     }}
 {{pass}}
 {{
