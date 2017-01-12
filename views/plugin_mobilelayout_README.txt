@@ -1,9 +1,10 @@
-Mobile support w3 (based on w3.css)
+plugin_mobilelayout
+-------------------
 
-Controller can return: w3, fs
+Controller can return: js, fs
 
-without w3: all supports are added: w3 = {'w3', 'jquery', 'calendar', 'web2py'}  # web2py means ajax support
-with w3: listed supports only are added, example: w3 = {'w3', 'jquery', 'calendar', 'web2py'}
+without js: no js/css supports will be added
+with js: list added supports as python set: js = {'w3', 'vue', ''jquery', 'calendar', 'web2py'}  # web2py means ajax support
 
 without fs: <body> without style= is rendered
 fs=<integer>: <body> renders with style="font-size: <integer>px;"
@@ -15,5 +16,5 @@ Hints:
 
 with fs, .btnRow class is defined: <div class="btnRow"> prevents included buttons to be smaller then 12px (to make them always well clickable)
 
-to improve behaviour of full-width text use <div class="fwt">
+together with w3.css: to improve behaviour of full-width text use <div class="fwt">
   this style will be used: .fwt {padding: 0 3px; overflow-x: hidden;}

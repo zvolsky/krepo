@@ -1,25 +1,10 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/krepo/static/css/w3.css"/>
-  <title>K-Report čtečka</title>
+{{extend 'plugin_mobilelayout.html'}}
 
-  <style>
-    .btnRow1 {font-size:{{=fs}}px; margin-bottom: 6px;}
-  </style>
-</head>
-<body style="font-size:{{=fs2}}px;">
-
-<div class="w3-row">
+<div class="w3-row btnRow">
   <a href="{{=URL('index', args=return_pos)}}" class="w3-btn w3-indigo w3-ripple w3-round">Zpět</a>
   <a href="{{=URL(args=(return_pos, 'plus'))}}" class="w3-btn w3-teal w3-round-xxlarge w3-ripple"><b>+</b></a>
   <a href="{{=URL(args=(return_pos, 'minus'))}}" class="w3-btn w3-teal w3-round-xxlarge w3-ripple"><b>-</b></a>
-
-  <div class="btnRow1 w3-lime">Nastavení velikosti textu - Ukázka textu</div>
-  <div class="btnRow1 w3-lime">Nastavení velikosti textu - Další ukázka textu</div>
 </div>
 
-</body>
-</html>
+<div class="w3-lime">Nastavení velikosti textu - Ukázka textu</div>
+<div class="w3-lime">Nastavení velikosti textu - Další ukázka textu</div>
