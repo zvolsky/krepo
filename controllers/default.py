@@ -2,7 +2,6 @@
 
 import bs4
 import requests
-import simplejson
 
 
 USER_FOR_DEFAULT_SETTING = 'krepo.default@'
@@ -236,7 +235,7 @@ def nabidka():
                     break
     return dict(temata=temata, vlakna=vlakna,
                 vlakno_id=vlakno_id or '-', vlakno_url=vlakno_url, return_pos=request.args(1) or 0,
-                simplejson=simplejson, js={'w3'})
+                js={'w3'})
 
 
 @auth.requires_login()
