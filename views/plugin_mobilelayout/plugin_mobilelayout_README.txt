@@ -1,7 +1,7 @@
 plugin_mobilelayout
 -------------------
 
-Add static/css/w3.css, static/js/vue.min.js.
+Add static/css/w3.css, static/js/vue.min.js, static/js/jquery.min.js.
 Use {{extend 'plugin_mobilelayout.html'}} in your view.
 
 Controller can return: js, fs
@@ -21,3 +21,11 @@ with fs, .btnRow class is defined: <div class="btnRow"> prevents included button
 
 together with w3.css: to improve behaviour of full-width text use <div class="fwt">
   this style will be used: .fwt {padding: 0 3px; overflow-x: hidden;}
+
+for vue.js (or other similar library) instead of changing web2py|vue delimiters you can do following:
+controller (or model+controller):
+    def JS(txt):
+        return '{{%s}}' % txt
+    return dict(js={'vue'}, JS=JS)
+view:
+    {{=JS('message')}}   ## -> {{message}} inside rendered .html

@@ -7,7 +7,7 @@
     <a href="{{=vlakno_url}}" class="w3-btn w3-yellow w3-ripple w3-round">K-Report</a>
     <button id="goToCurrent" data-vlakno-id="{{=vlakno_id}}" class="w3-btn w3-yellow w3-ripple w3-round">V</button>
   {{pass}}
-  <a href="{{=URL('fontsize', args=(return_pos, 'nic'))}}" class="w3-btn w3-teal w3-round-xxlarge w3-ripple"><b>+ / -</b></a>
+  <a href="{{=URL('plugin_mobilelayout', 'fontsize', args=('default/index/%s' % return_pos).replace('/', '-'))}}" class="w3-btn w3-teal w3-round-xxlarge w3-ripple"><b>+ / -</b></a>
 
   {{if not auth.user:}}
     <a href="{{=URL('user')}}" class="w3-btn w3-pink w3-ripple w3-round">Přihlásit se</a>

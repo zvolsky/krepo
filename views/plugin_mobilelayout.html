@@ -11,17 +11,13 @@
   {{block head}}{{end}}
 </head>
 
-{{if 'fs' in locals():}}
-  {{if not fs:}}
-    {{fs=session and session.fs or auth.user and auth.user.fs or 14}}
-  {{pass}}
-<style>
-  .btnRow {font-size:{{=max(12, fs)}}px;}
-</style>
-<body style="font-size:{{=fs}}px;">
-{{else:}}
-<body>
+{{if '_fs' not in locals() or not _fs:}}
+  {{_fs=session and session.fs or auth.user and auth.user.fs or 14}}
 {{pass}}
+<style>
+  .btnRow {font-size:{{=max(12, _fs)}}px;}
+</style>
+<body style="font-size:{{=_fs}}px;">
 
 {{block center}}
 {{include}}

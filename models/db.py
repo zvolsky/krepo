@@ -90,7 +90,7 @@ plugins = PluginManager()
 
 #mz ++z
 auth.settings.extra_fields['auth_user'] = [
-    Field('fs', 'integer', readable=False, writable=False, default=150),
+    Field('fs', 'integer', readable=False, writable=False, default=14),
     ]
 #mz ++k
 

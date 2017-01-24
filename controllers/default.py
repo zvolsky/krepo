@@ -2,6 +2,7 @@
 
 import bs4
 import requests
+import simplejson
 
 
 USER_FOR_DEFAULT_SETTING = 'krepo.default@'
@@ -204,18 +205,7 @@ def index():
     return dict(pos=pos, tato=tato, vpred=vpred, vzad=vzad, ok=ok, prispevky=prispevky,
                 vlakno_id=vlakno.id if forced_by_id else nastavene[pos].vlakno.id,
                 all_pages=all_pages, nejsou_nove=not limit and nezacaly_nove,
-                forced_by_id=forced_by_id, fs=None, js={'w3'})
-
-
-def fontsize():
-    fs1 = session.fs or auth.user and auth.user.fs or 14
-    if request.args(1):
-        if request.args(1) == 'plus':
-            fs1 = min(1000, int(fs1 * 1.1))
-        elif request.args(1) == 'minus':
-            fs1 = max(10, int(fs1 / 1.1))
-        session.fs = fs1
-    return dict(return_pos=request.args(0), fs=None, js={'w3'})
+                forced_by_id=forced_by_id, js={'w3'})
 
 
 def nabidka():
@@ -246,7 +236,7 @@ def nabidka():
                     break
     return dict(temata=temata, vlakna=vlakna,
                 vlakno_id=vlakno_id or '-', vlakno_url=vlakno_url, return_pos=request.args(1) or 0,
-                fs=None, js={'w3'})
+                simplejson=simplejson, js={'w3'})
 
 
 @auth.requires_login()
