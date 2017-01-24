@@ -12,9 +12,6 @@ auth.settings.extra_fields['auth_user'] = [
 '''
 
 
-import simplejson
-
-
 def fontsize():
     fs1 = session.fs or auth.user and auth.user.fs or 14
     if request.args(1):
