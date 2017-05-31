@@ -7,6 +7,9 @@
 {{extend 'plugin_mobilelayout.html'}}
 
 <header class="btnRow w3-row">
+  {{if not auth.user_id:}}
+    <a href="{{=URL('user', args=('login',))}}" class="w3-btn w3-red w3-round">přihlásit</a>
+  {{pass}}
   <a href="{{=URL('nabidka', args=(vlakno_id, pos))}}" class="w3-btn w3-ripple w3-round">&#8801;</a>
 
   {{if forced_by_id:}}

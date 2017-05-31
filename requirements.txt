@@ -6,10 +6,12 @@ bs4
 pokud: server/krepo: Nebylo nalezeno defaultní nastavení krepo.default...
 udělej:
   - server/krepo/default/user/register,
-  - zaregistruj mail někam na vlastní doménu: krepo.default@zitranavylet.cz,
-  - server/krepo/default/user/login, přihlaš krepo.default@...
+  - zaregistruj křestní i příjmení: krepo.default
+  - mail někam na vlastní doménu: krepo.default@zitranavylet.cz,
+  - server/krepo/default/user/login, přihlaš krepo.default@... (přihlášení není vidět, hodí standard.chybu)
   - server/krepo/sysadmin/temata,  # Ok.
   - server/krepo/sysadmin/vlakna,  # Ok.
   - server/krepo/default/nastav,
   - nastav defaultní diskuze
+  - server/krepo/default/user/logout,
   - server/krepo/plugin_manage_groups/index mohu přidat adminy kromě krepo.default@...
