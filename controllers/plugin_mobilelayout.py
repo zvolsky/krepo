@@ -21,7 +21,10 @@ def fontsize():
             fs1 = max(10, int(fs1 / 1.1))
         session.fs = fs1
         if auth.user_id:
-            db.auth_user[auth.user_id] = {'fs': fs1}
+            try:
+                db.auth_user[auth.user_id] = {'fs': fs1}
+            except StandardError:
+                pass
 
     back_path = request.args(0)
     path_parts = back_path.split('-')
