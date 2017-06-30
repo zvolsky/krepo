@@ -26,7 +26,7 @@ def index():
         return db(db.user_vlakno).select(
                 db.user_vlakno.ALL, db.vlakno.ALL,
                 join=db.vlakno.on(db.vlakno.id == db.user_vlakno.vlakno_id),
-                orderby=~db.user_vlakno.priorita
+                orderby=(~db.user_vlakno.priorita, db.user_vlakno.id)
                 )
 
     def get_kr_tag(el, kr_tag):   # '<!--name-->'
