@@ -1,4 +1,4 @@
-# coding: utf8
+# -*- coding: utf-8 -*-
 {
 '!langcode!': 'pl',
 '!langname!': 'Polska',
@@ -62,6 +62,7 @@
 'Edit Profile': 'Edytuj profil',
 'Edit This App': 'Edytuj tę aplikację',
 'Email and SMS': 'Email and SMS',
+'Enter an integer between %(min)g and %(max)g': 'Enter an integer between %(min)g and %(max)g',
 'Errors': 'Errors',
 'export as csv file': 'eksportuj jako plik csv',
 'FAQ': 'FAQ',

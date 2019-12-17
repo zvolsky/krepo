@@ -2,6 +2,15 @@
 
 import bs4
 import requests
+'''
+requests/bs4/lxml problem 16.12.2019
+  padal requests.get: zkopíroval jsem /etc/ssl/openssl.cnf na k-report.net.cnf a upravil dole MinProtocol = TLSv1.0 (+ nginx restart)
+  dále padalo i parsování, pomohla nová verze lxml: pip install --upgrade lxml
+    ale i pak chyby asi 50% proto (celkem 3x) ohyzdná struktura kolem bs4.BeautifulSoup
+po nějaké době TODO:
+  aktualizovat lxml a zkusit likvidovat try/except (opakovat mnoho pokusů!)
+  zkusit přístup bez k-report.net.cnf
+'''
 
 
 USER_FOR_DEFAULT_SETTING = 'krepo.default@'
@@ -56,7 +65,13 @@ def index():
         prispevky = []
         if ok:
             # extrahovat příspěvky
-            soup = bs4.BeautifulSoup(results.content, 'lxml')
+            try:
+                soup = bs4.BeautifulSoup(results.content, 'lxml')
+            except:
+                try:
+                    soup = bs4.BeautifulSoup(results.content, 'lxml')
+                except:
+                    soup = bs4.BeautifulSoup(results.content)
             netisk = soup.find_all('table', 'netisk')
             if netisk:
                 netisk = netisk[0]

@@ -1,4 +1,4 @@
-# coding: utf8
+# -*- coding: utf-8 -*-
 {
 '!langcode!': 'nl',
 '!langname!': 'Nederlands',
@@ -135,6 +135,7 @@
 'Editing file "%s"': 'Bewerk bestand "%s"',
 'Email and SMS': 'E-mail en SMS',
 'enter a number between %(min)g and %(max)g': 'geef een getal tussen %(min)g en %(max)g',
+'Enter an integer between %(min)g and %(max)g': 'Enter an integer between %(min)g and %(max)g',
 'enter an integer between %(min)g and %(max)g': 'geef een integer tussen %(min)g en %(max)g',
 'Error logs for "%(app)s"': 'Error logs voor "%(app)s"',
 'errors': 'errors',

@@ -1,4 +1,4 @@
-# coding: utf8
+# -*- coding: utf-8 -*-
 {
 '!langcode!': 'id',
 '!langname!': 'Indonesian',
@@ -105,6 +105,7 @@
 'enter a valid email address': 'masukkan alamat email yang benar',
 'enter a valid URL': 'masukkan URL yang benar',
 'enter a value': 'masukkan data',
+'Enter an integer between %(min)g and %(max)g': 'Enter an integer between %(min)g and %(max)g',
 'Error': 'Kesalahan',
 'Error logs for "%(app)s"': 'Catatan kesalahan untuk "%(app)s"',
 'Errors': 'Kesalahan',
@@ -258,8 +259,8 @@
 'Verify Password': 'Verifikasi Kata Sandi',
 'Version': 'Versi',
 'View': 'Lihat',
-'Views': 'Lihat',
 'views': 'lihat',
+'Views': 'Lihat',
 'Web Framework': 'Kerangka Web',
 'web2py is up to date': 'web2py terbaru',
 'web2py Recent Tweets': 'Tweet web2py terbaru',

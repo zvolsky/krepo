@@ -1,4 +1,4 @@
-# coding: utf8
+# -*- coding: utf-8 -*-
 {
 '!=': '!=',
 '!langcode!': 'ro',
@@ -135,6 +135,7 @@
 'Editing file "%s"': 'Editare fișier "%s"',
 'Email and SMS': 'E-mail și SMS',
 'enter a number between %(min)g and %(max)g': 'introduceți un număr între %(min)g și %(max)g',
+'Enter an integer between %(min)g and %(max)g': 'Enter an integer between %(min)g and %(max)g',
 'enter an integer between %(min)g and %(max)g': 'introduceți un întreg între %(min)g și %(max)g',
 'Error logs for "%(app)s"': 'Log erori pentru "%(app)s"',
 'errors': 'erori',

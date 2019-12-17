@@ -14,7 +14,13 @@ def temata():
     if not res_tema or res_tema.status_code != 200:
         return 'Selhal get: témata.'
 
-    soup = bs4.BeautifulSoup(res_tema.content, 'lxml')
+    try:
+        soup = bs4.BeautifulSoup(res_tema.content, 'lxml')
+    except:
+        try:
+            soup = bs4.BeautifulSoup(res_tema.content, 'lxml')
+        except:
+            soup = bs4.BeautifulSoup(res_tema.content)
 
     tbl = soup.find('table', "diskuse_tabulka")
     if not tbl:
@@ -53,7 +59,13 @@ def vlakna():
         if not res_vlakno or res_vlakno.status_code != 200:
             return 'Selhal get: %s.' % tema1.txt
 
-        soup = bs4.BeautifulSoup(res_vlakno.content, 'lxml')
+        try:
+            soup = bs4.BeautifulSoup(res_vlakno.content, 'lxml')
+        except:
+            try:
+                soup = bs4.BeautifulSoup(res_vlakno.content, 'lxml')
+            except:
+                soup = bs4.BeautifulSoup(res_vlakno.content)
 
         tbl = soup.find('table', "diskuse_tabulka")
         if not tbl:

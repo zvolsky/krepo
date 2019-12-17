@@ -1,4 +1,4 @@
-# coding: utf8
+# -*- coding: utf-8 -*-
 {
 '!langcode!': 'de',
 '!langname!': 'Deutsch (DE)',
@@ -36,6 +36,7 @@
 'Client IP': 'Client IP',
 'Community': 'Community',
 'Components and Plugins': 'Komponenten und Plugins',
+'Confirm Password': 'Confirm Password',
 'Controller': 'Controller',
 'Copyright': 'Copyright',
 'Created By': 'Erstellt von',
@@ -98,6 +99,7 @@
 'Layout Plugins': 'Layout Plugins',
 'Layouts': 'Layouts',
 'Live Chat': 'Live Chat',
+'Log In': 'Log In',
 'Logged in': 'Eingeloggt',
 'Logged out': 'Ausgeloggt',
 'Login': 'Einloggen',
@@ -151,6 +153,8 @@
 'Registration key': 'Registierungsschlüssel',
 'Registration successful': 'Registrierung erfolgreich',
 'Remember me (for 30 days)': 'Eingeloggt bleiben (30 Tage lang)',
+'Request Reset Password': 'Request Reset Password',
+'Request reset password': 'Request reset password',
 'Reset Password key': 'Passwortschlüssel zurücksetzen',
 'Role': 'Rolle',
 'Roles': 'Rollen',
@@ -159,6 +163,7 @@
 'Save model as...': 'Speichere Vorlage als...',
 'Semantic': 'Semantik',
 'Services': 'Dienste',
+'Sign Up': 'Sign Up',
 'Size of cache:': 'Cachegröße:',
 'state': 'Status',
 'Statistics': 'Statistik',
